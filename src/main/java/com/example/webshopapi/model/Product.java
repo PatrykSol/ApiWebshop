@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private int id;
 
@@ -24,10 +24,22 @@ public class Product {
     private int stockquantity;
 
     @Column(name = "categoryid")
-    private int categoryid;
+    private int categoryId;
 
     @Column(name = "manufacturer")
     private String manufacturer;
+
+    @Column(name = "image_urls")
+    private String imageUrls;
+
+
+    public String[] getImageUrls() {
+        return imageUrls.split(",");
+    }
+
+    public void setImageUrls(String[] imageUrls) {
+        this.imageUrls = String.join(",", imageUrls);
+    }
 
     public int getId() {
         return id;
@@ -69,12 +81,12 @@ public class Product {
         this.stockquantity = stockquantity;
     }
 
-    public int getCategoryid() {
-        return categoryid;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategoryid(int categoryid) {
-        this.categoryid = categoryid;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getManufacturer() {

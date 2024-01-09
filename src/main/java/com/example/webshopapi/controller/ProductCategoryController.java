@@ -25,13 +25,5 @@ public class ProductCategoryController {
         return productCategoryDAO.getProductCategoryById(id);
     }
 
-    @PostMapping
-    public ProductCategory saveProductCategory(@RequestBody ProductCategory productCategory) {
-        return productCategoryDAO.saveProductCategory(productCategory);
-    }
 
-    @DeleteMapping("/{id}")
-    public void deleteProductCategory(@PathVariable int id) {
-        productCategoryDAO.deleteProductCategory(id);
-    }
 }

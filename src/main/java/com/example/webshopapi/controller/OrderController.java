@@ -1,10 +1,13 @@
 package com.example.webshopapi.controller;
 
+import com.example.webshopapi.dao.CustomerDAO;
 import com.example.webshopapi.dao.OrderDAO;
 import com.example.webshopapi.model.Back_Order;
 import com.example.webshopapi.model.Front_Order;
 import com.example.webshopapi.model.OrderProduct;
+import com.example.webshopapi.service.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +24,12 @@ public class OrderController {
     private final OrderDAO orderDAO;
 
     private final ProductOrderController productOrderController;
+    private final CustomerDAO customerDAO;
 
-    public OrderController(OrderDAO orderDAO, ProductOrderController productOrderController) {
+    public OrderController(OrderDAO orderDAO, ProductOrderController productOrderController, CustomerDAO customerDAO) {
         this.orderDAO = orderDAO;
         this.productOrderController = productOrderController;
+        this.customerDAO = customerDAO;
     }
 
     @PostMapping
@@ -45,13 +50,16 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Front_Order>> getAllOrders() {
-        List<Back_Order> backendOrders = orderDAO.findAll();
-        List<Front_Order> frontendOrders = backendOrders.stream()
-                .map(this::convertToFrontendOrder)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(frontendOrders);
+    public ResponseEntity<List<Front_Order>> getAllOrders(@RequestParam String username) {
+        if (customerDAO.existsByUsernameAndRole(username, Role.ADMIN)) {
+            List<Back_Order> backendOrders = orderDAO.findAll();
+            List<Front_Order> frontendOrders = backendOrders.stream()
+                    .map(this::convertToFrontendOrder)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(frontendOrders);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     private Front_Order convertToFrontendOrder(Back_Order backendOrder) {

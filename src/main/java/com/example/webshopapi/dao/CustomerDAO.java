@@ -1,6 +1,7 @@
 package com.example.webshopapi.dao;
 
 import com.example.webshopapi.model.Customer;
+import com.example.webshopapi.service.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,4 +22,8 @@ public class CustomerDAO {
         return customerRepository.findById(id).orElse(null);
     }
 
+    public boolean existsByUsernameAndRole(String username, Role role) {
+        return customerRepository.existsByUsernameAndRole(username, role);
+    }
 }
+

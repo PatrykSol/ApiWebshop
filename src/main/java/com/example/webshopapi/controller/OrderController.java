@@ -50,8 +50,8 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Front_Order>> getAllOrders(@RequestParam String username) {
-        if (customerDAO.existsByUsernameAndRole(username, Role.ADMIN)) {
+    public ResponseEntity<List<Front_Order>> getAllOrders(@RequestParam(name = "id") UUID id) {
+        if (customerDAO.existsByIdAndRole(id, Role.ADMIN)) {
             List<Back_Order> backendOrders = orderDAO.findAll();
             List<Front_Order> frontendOrders = backendOrders.stream()
                     .map(this::convertToFrontendOrder)

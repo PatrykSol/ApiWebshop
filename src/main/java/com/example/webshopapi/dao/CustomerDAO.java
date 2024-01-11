@@ -22,8 +22,12 @@ public class CustomerDAO {
         return customerRepository.findById(id).orElse(null);
     }
 
-    public boolean existsByUsernameAndRole(String username, Role role) {
-        return customerRepository.existsByUsernameAndRole(username, role);
+    public boolean existsByIdAndRole(UUID id, Role role){
+        return customerRepository.existsByIdAndRole(id, role);
     }
+
+//    public boolean existsByUsernameAndRole(UUID id, Role role) {
+//        return customerRepository.existsByIdAndRole(id, role);
+//    }
 }
 

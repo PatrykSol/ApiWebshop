@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -29,8 +30,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts(@RequestParam String username) {
-        if (customerDAO.existsByUsernameAndRole(username, Role.ADMIN)) {
+    public ResponseEntity<List<Product>> getAllProducts(@RequestParam UUID id) {
+        if (customerDAO.existsByIdAndRole(id, Role.ADMIN)) {
             List<Product> products = productDAO.getAllProducts();
             return ResponseEntity.ok(products);
         } else {
@@ -51,8 +52,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product,String username) {
-        if (customerDAO.existsByUsernameAndRole(username, Role.ADMIN)) {
+    public ResponseEntity<Product> createProduct(@RequestBody Product product, UUID id) {
+        if (customerDAO.existsByIdAndRole(id, Role.ADMIN)) {
             Product createdProduct = productDAO.save(product);
             return ResponseEntity.ok(createdProduct);
         } else {
